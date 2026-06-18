@@ -1,0 +1,19 @@
+{
+  "name": "GlobalMailbox",
+  "alias": "globalmailbox",
+  "description": "A Global Mailbox page aggregating conversations from all mailboxes you can access.",
+  "version": "1.0.0",
+  "detailsUrl": "https://github.com/mnicole-dev/freescout-globalmailbox-module",
+  "author": "KodeSaaS",
+  "authorUrl": "https://kodesaas.com",
+  "requiredAppVersion": "1.8.0",
+  "license": "AGPL-3.0",
+  "keywords": [],
+  "active": 0,
+  "order": 0,
+  "img": "",
+  "providers": ["Modules\\GlobalMailbox\\Providers\\GlobalMailboxServiceProvider"],
+  "aliases": {},
+  "files": ["start.php"],
+  "requires": []
+}
