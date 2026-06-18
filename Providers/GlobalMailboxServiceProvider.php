@@ -19,13 +19,16 @@ class GlobalMailboxServiceProvider extends ServiceProvider
 
     public function hooks()
     {
+        // Chemins RELATIFS (pas asset()/URL) : Minify les lit sur disque (comme '/js/main.js' du cœur),
+        // au lieu de tenter un fetch HTTP (qui échoue en CLI → rebuild impossible). Bonus : changer ce
+        // chemin modifie le hash du bundle combiné → cache navigateur busté automatiquement.
         \Eventy::addFilter('stylesheets', function ($styles) {
-            $styles[] = asset('modules/globalmailbox/css/globalmailbox.css');
+            $styles[] = '/modules/globalmailbox/css/globalmailbox.css';
             return $styles;
         });
 
         \Eventy::addFilter('javascripts', function ($javascripts) {
-            $javascripts[] = asset('modules/globalmailbox/js/globalmailbox.js');
+            $javascripts[] = '/modules/globalmailbox/js/globalmailbox.js';
             return $javascripts;
         });
 
