@@ -1,3 +1,4 @@
+/* build: v3 (lien dans le menu de gauche) */
 /**
  * Global Mailbox — JS du module.
  *
