@@ -24,6 +24,11 @@ class GlobalMailboxServiceProvider extends ServiceProvider
             return $styles;
         });
 
+        \Eventy::addFilter('javascripts', function ($javascripts) {
+            $javascripts[] = asset('modules/globalmailbox/js/globalmailbox.js');
+            return $javascripts;
+        });
+
         // Lien "Global Mailbox" dans le menu principal, si l'utilisateur peut voir au moins une boîte.
         \Eventy::addAction('menu.append', function () {
             if (!auth()->check()) {
