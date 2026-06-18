@@ -15,16 +15,6 @@
     }
     var $ = window.jQuery;
 
-    // Déplace le lien « Global Mailbox » du menu de gauche vers la droite, juste après le menu compte (l'@).
-    // S'exécute sur toutes les pages (fichier chargé globalement) pour que le lien soit toujours à droite.
-    $(function () {
-        var item = $('#menu-global-mailbox');
-        var account = $('.navbar-right .dropdown-toggle-account').closest('li');
-        if (item.length && account.length && !item.data('gm-moved')) {
-            item.data('gm-moved', true).insertAfter(account);
-        }
-    });
-
     /**
      * Adaptations de l'interface native de liste pour la vue multi-boîtes. Appelée depuis la vue /global.
      *  1. Assignation groupée (admins) : menu natif scopé boîte masqué → on injecte + on poste les IDs.
