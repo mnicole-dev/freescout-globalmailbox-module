@@ -4,6 +4,17 @@
 
 {{-- Pas de boîte/dossier unique : on neutralise les attributs scopés (le realtime natif est gardé par "if (mailbox_id)"). --}}
 @section('body_attrs')@parent data-mailbox_id="" data-folder_id=""@endsection
+@section('body_class', 'gm-page')
+
+{{-- Style inline (yieldé APRÈS le bundle Minify → chargement garanti, contrairement aux CSS de module
+     qui peuvent être perdues par le minifier). Scopé à .gm-page → aucun impact sur les boîtes. --}}
+@section('stylesheets')
+    <style>
+        /* Colonne « Assigné à » réduite à son contenu (width:1% + nowrap battent le table-layout:auto). */
+        .gm-page .table-conversations th.conv-owner,
+        .gm-page .table-conversations td.conv-owner { width: 1%; white-space: nowrap; }
+    </style>
+@endsection
 
 @section('sidebar')
     @include('partials/sidebar_menu_toggle')

@@ -4,15 +4,10 @@
  * les autres pages n'ont pas l'attribut) → ce sélecteur ne touche jamais les boîtes individuelles.
  */
 
-/* Colonne « Assigné à » plus étroite (le nom déborde proprement en ellipse). */
-body[data-mailbox_id=""] .table-conversations col.conv-owner,
-body[data-mailbox_id=""] .table-conversations th.conv-owner,
-body[data-mailbox_id=""] .table-conversations td.conv-owner {
-    width: 120px;
-    max-width: 120px;
-}
-body[data-mailbox_id=""] .table-conversations td.conv-owner {
-    overflow: hidden;
-    text-overflow: ellipsis;
+/* Colonne « Assigné à » réduite à son contenu (doublon du style inline de la vue, au cas où
+   ce fichier soit bien chargé via le minifier). Scopé .gm-page → jamais les boîtes individuelles. */
+.gm-page .table-conversations th.conv-owner,
+.gm-page .table-conversations td.conv-owner {
+    width: 1%;
     white-space: nowrap;
 }
