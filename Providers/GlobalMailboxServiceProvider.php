@@ -62,7 +62,8 @@ class GlobalMailboxServiceProvider extends ServiceProvider
                 return;
             }
             $active = (\Route::currentRouteName() === 'globalmailbox.index') ? 'active' : '';
-            echo '<li class="' . $active . '"><a href="' . route('globalmailbox.index') . '">'
+            // id pour que le JS puisse le déplacer dans la barre de droite (pas de hook PHP côté navbar-right).
+            echo '<li id="menu-global-mailbox" class="' . $active . '"><a href="' . route('globalmailbox.index') . '">'
                 . '<i class="glyphicon glyphicon-globe"></i> ' . e(__('Global Mailbox')) . '</a></li>';
         });
     }

@@ -6,6 +6,16 @@
  * 2. Tri & pagination : le cœur les fait en AJAX via loadConversations() (qui exige mailbox_id/folder_id,
  *    vides ici) → on bascule en navigation pleine page (?page=N / ?sorting[...]), lue par le contrôleur.
  */
+// Déplace le lien « Global Mailbox » du menu de gauche vers la droite, juste après le menu compte (l'@).
+// S'exécute sur toutes les pages (ce fichier est chargé globalement) pour que le lien soit toujours à droite.
+$(document).ready(function () {
+    var item = $('#menu-global-mailbox');
+    var account = $('.navbar-right .dropdown-toggle-account').closest('li');
+    if (item.length && account.length && !item.data('gm-moved')) {
+        item.data('gm-moved', true).insertAfter(account);
+    }
+});
+
 function globalMailboxInit()
 {
     $(document).ready(function () {
