@@ -29,6 +29,30 @@ class GlobalMailboxServiceProvider extends ServiceProvider
             return $javascripts;
         });
 
+        // Colonne « Boîte » ajoutée AVANT la colonne Numéro, UNIQUEMENT sur la page globale
+        // (les hooks ci-dessous se déclenchent sur toutes les listes de conversations du cœur).
+        $is_global = function () {
+            $route = \Request::route();
+            return $route && $route->getName() === 'globalmailbox.index';
+        };
+
+        \Eventy::addAction('conversations_table.col_before_conv_number', function () use ($is_global) {
+            if ($is_global()) {
+                echo '<col class="conv-mailbox">';
+            }
+        });
+        \Eventy::addAction('conversations_table.th_before_conv_number', function () use ($is_global) {
+            if ($is_global()) {
+                echo '<th class="conv-mailbox">' . e(__('Mailbox')) . '</th>';
+            }
+        });
+        \Eventy::addAction('conversations_table.td_before_conv_number', function ($conversation) use ($is_global) {
+            if ($is_global()) {
+                $name = optional($conversation->mailbox_cached)->name ?? '';
+                echo '<td class="conv-mailbox" title="' . e($name) . '">' . e($name) . '</td>';
+            }
+        });
+
         // Lien "Global Mailbox" dans le menu principal, si l'utilisateur peut voir au moins une boîte.
         \Eventy::addAction('menu.append', function () {
             if (!auth()->check()) {

@@ -10,9 +10,17 @@
      qui peuvent être perdues par le minifier). Scopé à .gm-page → aucun impact sur les boîtes. --}}
 @section('stylesheets')
     <style>
-        /* Colonne « Assigné à » réduite à son contenu (width:1% + nowrap battent le table-layout:auto). */
+        /* .table-conversations est en table-layout:fixed : on donne des LARGEURS FIXES (pas de width:1%,
+           qui écrase la colonne et fait déborder le texte sur les voisines). Subject absorbe le reste. */
         .gm-page .table-conversations th.conv-owner,
-        .gm-page .table-conversations td.conv-owner { width: 1%; white-space: nowrap; }
+        .gm-page .table-conversations td.conv-owner { width: 150px; }
+        .gm-page .table-conversations th.conv-mailbox,
+        .gm-page .table-conversations td.conv-mailbox {
+            width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 @endsection
 
