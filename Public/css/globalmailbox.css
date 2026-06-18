@@ -1,2 +1,18 @@
-.gm-table td { vertical-align: middle; }
-.gm-table th { font-size: 12px; text-transform: uppercase; color: #6f7780; }
+/*
+ * Global Mailbox — styles scopés à la page globale uniquement.
+ * La page /global pose un data-mailbox_id VIDE sur le body (les vraies boîtes ont un id numérique,
+ * les autres pages n'ont pas l'attribut) → ce sélecteur ne touche jamais les boîtes individuelles.
+ */
+
+/* Colonne « Assigné à » plus étroite (le nom déborde proprement en ellipse). */
+body[data-mailbox_id=""] .table-conversations col.conv-owner,
+body[data-mailbox_id=""] .table-conversations th.conv-owner,
+body[data-mailbox_id=""] .table-conversations td.conv-owner {
+    width: 120px;
+    max-width: 120px;
+}
+body[data-mailbox_id=""] .table-conversations td.conv-owner {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
