@@ -33,12 +33,43 @@ class GlobalMailboxController extends Controller
         }
         $order_column = ($sorting['sort_by'] === 'date') ? 'last_reply_at' : $sorting['sort_by'];
 
-        $conversations = Conversation::whereIn('mailbox_id', $ids)
-            ->whereIn('status', [Conversation::STATUS_ACTIVE, Conversation::STATUS_PENDING])
-            ->where('state', Conversation::STATE_PUBLISHED)
+        // Filtres « type dossiers », agrégés sur les boîtes accessibles.
+        $filter = $request->input('filter', 'all');
+        if (!in_array($filter, ['all', 'unassigned', 'mine', 'closed'], true)) {
+            $filter = 'all';
+        }
+        $active_statuses = [Conversation::STATUS_ACTIVE, Conversation::STATUS_PENDING];
+        $base = function () use ($ids) {
+            return Conversation::whereIn('mailbox_id', $ids)->where('state', Conversation::STATE_PUBLISHED);
+        };
+
+        $counts = [
+            'all'        => $base()->whereIn('status', $active_statuses)->count(),
+            'unassigned' => $base()->whereIn('status', $active_statuses)->whereNull('user_id')->count(),
+            'mine'       => $base()->whereIn('status', $active_statuses)->where('user_id', $user->id)->count(),
+            'closed'     => $base()->where('status', Conversation::STATUS_CLOSED)->count(),
+        ];
+
+        $query = $base();
+        switch ($filter) {
+            case 'unassigned':
+                $query->whereIn('status', $active_statuses)->whereNull('user_id');
+                break;
+            case 'mine':
+                $query->whereIn('status', $active_statuses)->where('user_id', $user->id);
+                break;
+            case 'closed':
+                $query->where('status', Conversation::STATUS_CLOSED);
+                break;
+            default:
+                $query->whereIn('status', $active_statuses);
+        }
+
+        $conversations = $query
             ->with(['customer', 'mailbox'])
             ->orderBy($order_column, $sorting['order'])
-            ->paginate(Conversation::DEFAULT_LIST_SIZE, ['*'], 'page', $request->get('page'));
+            ->paginate(Conversation::DEFAULT_LIST_SIZE, ['*'], 'page', $request->get('page'))
+            ->appends(['filter' => $filter]);
 
         // Assignables pour l'assignation groupée cross-boîtes = admins (accès à toutes les boîtes).
         $assignees = User::nonDeleted()
@@ -51,6 +82,8 @@ class GlobalMailboxController extends Controller
             'sorting'       => $sorting,
             'params'        => ['target_blank' => false],
             'assignees'     => $assignees,
+            'filter'        => $filter,
+            'counts'        => $counts,
         ]);
     }
 }
